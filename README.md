@@ -18,4 +18,4 @@ The Push Sample Application is an example of the simplest application possible t
 
 This sample application registers for push notifications in the 'MainPage' class in order to make it easier to display the output on the screen. It is probably more appropriate for you to register for push notifications in your 'App' object instead.
 
-This application is set up to receive push messages via the 'PushService' class. These messages will be displayed via a 'MessageBox'.
+This application is set up to receive push messages via the 'MainPage' class. These messages will be displayed via a 'MessageBox'. It is probably more appropriate for you to create a Service to manage Push actions.

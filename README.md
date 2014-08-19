@@ -4,7 +4,7 @@ Pivotal Mobile Services Suite Push SDK Sample for WP8
 Push SDK Usage
 --------------
 
-For more information please visit the [docs site](http://http://docs.pivotal.io/mobile/notifications/wp8/)
+For more information please visit the [docs site](https://github.com/cfmobile/docs-pushnotifications-wp8)
 
 Device Requirements
 -------------------

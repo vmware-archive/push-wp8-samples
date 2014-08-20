@@ -46,7 +46,7 @@ namespace PushWP8Sample
         {
             get
             {
-                return _parameters ?? (_parameters = new MSSParameters(VariantUuid, VariantSecret, BaseServerUrl, DeviceAlias, Tags));
+                return _parameters ?? (_parameters = new MSSParameters(VariantUuid, VariantSecret, BaseServerUrl, null /* ServiceName */, DeviceAlias, Tags));
             }
         }
 

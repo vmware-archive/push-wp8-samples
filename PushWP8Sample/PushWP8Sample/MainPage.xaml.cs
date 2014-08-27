@@ -46,7 +46,7 @@ namespace PushWP8Sample
         {
             get
             {
-                return _parameters ?? (_parameters = new MSSParameters(VariantUuid, VariantSecret, BaseServerUrl, null /* ServiceName */, DeviceAlias, Tags));
+                return _parameters ?? (_parameters = new MSSParameters(VariantUuid, VariantSecret, BaseServerUrl, DeviceAlias, null /*Tags*/));
             }
         }
 
@@ -83,7 +83,7 @@ namespace PushWP8Sample
             //Example of how to register for Push with the Pivotal Mobile Services Suite Push Server
             try
             {
-                await MSSPush.SharedInstance.RegisterForPushAsync(Parameters, OnRegistrationCompleted);
+                await MSSPush.SharedInstance.RegisterForPushAsync(Parameters, null, OnRegistrationCompleted);
             }
             catch (Exception e)
             {
@@ -122,18 +122,30 @@ namespace PushWP8Sample
                 QueuePushLog("Successfully registered for Push");
 
                 //e.g. HttpNotificationChannel can be accessed from the args for additional use
-                //var channel = args.RawNotificationChannel;
-                //channel.BindToShellToast();
-                //channel.ShellToastNotificationReceived += ChannelOnShellToastNotificationReceived;
+                var channel = args.RawNotificationChannel;
+                channel.BindToShellToast();
+                channel.ShellToastNotificationReceived += ChannelOnShellToastNotificationReceived;
 
                 //e.g. Unregister for Push after successfully registering
-                QueuePushLog("Unregistering...");
-                StartPushUnregistration();
+//                QueuePushLog("Unregistering...");
+//                StartPushUnregistration();
             }
             else
             {
                 QueuePushLog("Failed to register for Push");
                 QueuePushLog(args.ErrorMessage);
+            }
+        }
+
+        private void ChannelOnShellToastNotificationReceived(object sender, NotificationEventArgs e)
+        {
+            if (e != null && e.Collection != null && e.Collection.ContainsKey("wp:Text1"))
+            {
+                QueuePushLog("Notification received: '" + e.Collection["wp:Text1"] + "'.");
+            }
+            else
+            {
+                QueuePushLog("Notification received with no message.");
             }
         }
 

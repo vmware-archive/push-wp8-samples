@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2012/deployment" AppPlatformVersion="8.0">
   <DefaultLanguage xmlns="" code="en-US" />
-  <App xmlns="" ProductID="{524d1a39-a86f-4b2d-9c5f-ddc366098897}" Title="PushWP8Sample" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="PushWP8Sample author" Description="Sample description" Publisher="PushWP8Sample" PublisherID="{67558fbe-38f7-4f08-9431-b6522e73322d}">
+  <App xmlns="" ProductID="{524d1a39-a86f-4b2d-9c5f-ddc366098897}" Title="PCF Mobile Services Push Demo" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="PushWP8Sample author" Description="Sample description" Publisher="PushWP8Sample" PublisherID="{67558fbe-38f7-4f08-9431-b6522e73322d}">
     <IconPath IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_NETWORKING" />

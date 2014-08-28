@@ -73,12 +73,6 @@ namespace PushWP8Sample
         public MainPage()
         {
             InitializeComponent();
-            Loaded += OnLoaded;
-        }
-
-        private void OnLoaded(object sender, RoutedEventArgs e)
-        {
-            OutputTextBox.Text = "";
         }
 
         #region WP8 Push Client SDK Methods
@@ -116,14 +110,7 @@ namespace PushWP8Sample
             Dispatcher.BeginInvoke(() =>
             {
                 Debug.WriteLine(message);
-                if (String.IsNullOrEmpty(OutputTextBox.Text))
-                {
-                    OutputTextBox.Text += message;
-                }
-                else
-                {
-                    OutputTextBox.Text += "\n" + message;
-                }
+                OutputTextBox.Text += "\n" + message;
                 // Scroll to bottom
                 OutputScrollViewer.UpdateLayout();
                 OutputScrollViewer.ScrollToVerticalOffset(OutputScrollViewer.ScrollableHeight);

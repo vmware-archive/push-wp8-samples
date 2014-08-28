@@ -57,7 +57,7 @@
             <TextBox x:Name="OutputTextBox"
                         Margin="0,0,0,0"
                         TextWrapping="Wrap"
-                        Text="Successfully registered for push.&#xD;&#xA;Registering for push..."
+                        Text="Press 'Register' to try registering for push notifications."
                         IsReadOnly="true"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch" />

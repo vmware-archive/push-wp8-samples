@@ -21,11 +21,34 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!--TitlePanel contains the name of the application and page title-->
-        <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Text="WP8 Push Client SDK" Style="{StaticResource PhoneTextNormalStyle}" Margin="12,0"/>
-            <TextBlock Text="sample app" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
-        </StackPanel>
+        <Grid x:Name="buttonList"
+              Grid.Row="0"
+              Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="RegisterButton"
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Content="Register"
+                    Click="RegisterButton_OnClick"
+                    HorizontalAlignment="Center" />
+            <Button x:Name="UnregisterButton"
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Content="Unregister"
+                    Click="UnregisterButton_OnClick"
+                    HorizontalAlignment="Center" />
+            <Button x:Name="TestPushButton"
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    Content="Test Push"
+                    Click="TestPushButton_OnClick"
+                    HorizontalAlignment="Center" />
+        </Grid>
 
         <!--ContentPanel - place additional content here-->
         <Border x:Name="ContentPanel"
@@ -33,7 +56,7 @@
                 Margin="12,0,12,12"
                 BorderBrush="White"
                 BorderThickness="2">
-            <phone:LongListSelector ItemsSource="{Binding Logs, ElementName=PageRoot}">
+            <phone:LongListSelector x:Name="LogView" ItemsSource="{Binding Logs, ElementName=PageRoot}">
                 <phone:LongListSelector.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding }"

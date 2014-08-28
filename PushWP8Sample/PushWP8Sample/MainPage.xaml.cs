@@ -2,19 +2,26 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
+using Windows.Foundation.Metadata;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Notification;
 using Microsoft.Phone.Shell;
 using MSSPush_Base.Models;
 using MSSPush_WP8;
 using MSSPush_WP8.Models;
+using Newtonsoft.Json;
 using PushWP8Sample.Resources;
+using push_wp8_sample.Model;
 
 namespace PushWP8Sample
 {
@@ -32,17 +39,22 @@ namespace PushWP8Sample
         private const string BaseServerUrl = "http://cfms-push-service-dev.main.vchs.cfms-apps.com";
 
         // Set to your own defined alias for this device.  May be null.
-        private const string DeviceAlias = "SampleDeviceAlias";
+        private const string DeviceAlias = "TACOS";
 
         // Set to your own defined tags. May be null.
         private static readonly List<string> Tags = new List<string> { "SampleTag1", "SampleTag2"};
+
+        // This is PCFMS environment associated with mobile app
+        private const string EnvironmentUuid = "a6b0ffd6-f944-46b9-89f9-132c5550ba92";
+        private const string EnvironmentKey = "647d9c48-5ce5-4196-807c-e8fec679d38d";
 
         #endregion
 
         #region Properties
 
+        private HttpNotificationChannel _channel;
         private MSSParameters _parameters;
-        private MSSParameters Parameters
+        public MSSParameters Parameters
         {
             get
             {
@@ -67,13 +79,6 @@ namespace PushWP8Sample
         {
             InitializeComponent();
             Logs = new ObservableCollection<string>();
-            Loaded += OnLoaded;
-        }
-
-        private void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
-        {
-            QueuePushLog("Registering...");
-            StartPushRegistration();
         }
 
         #region WP8 Push Client SDK Methods
@@ -108,7 +113,12 @@ namespace PushWP8Sample
 
         private void QueuePushLog(string message)
         {
-            Dispatcher.BeginInvoke(() => Logs.Add(message));
+            Dispatcher.BeginInvoke(() =>
+            {
+                Logs.Add(message);
+                Debug.WriteLine(message);
+            });
+
         }
 
         #endregion
@@ -122,13 +132,9 @@ namespace PushWP8Sample
                 QueuePushLog("Successfully registered for Push");
 
                 //e.g. HttpNotificationChannel can be accessed from the args for additional use
-                var channel = args.RawNotificationChannel;
-                channel.BindToShellToast();
-                channel.ShellToastNotificationReceived += ChannelOnShellToastNotificationReceived;
-
-                //e.g. Unregister for Push after successfully registering
-//                QueuePushLog("Unregistering...");
-//                StartPushUnregistration();
+                _channel = args.RawNotificationChannel;
+                _channel.BindToShellToast();
+                _channel.ShellToastNotificationReceived += ChannelOnShellToastNotificationReceived;
             }
             else
             {
@@ -163,5 +169,85 @@ namespace PushWP8Sample
         }
 
         #endregion
+
+        private void RegisterButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            QueuePushLog("Registering...");
+            StartPushRegistration();
+        }
+
+        private void UnregisterButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            QueuePushLog("Unregistering...");
+            StartPushUnregistration();
+        }
+
+        private async void TestPushButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            var httpRequest = WebRequest.CreateHttp(String.Format("{0}/v1/push", BaseServerUrl));
+            httpRequest.Method = "POST";
+            httpRequest.Accept = "application/json";
+            httpRequest.Headers[HttpRequestHeader.Authorization] = BasicAuthorizationValue(EnvironmentUuid, EnvironmentKey);
+
+            httpRequest.ContentType = "application/json; charset=UTF-8";
+            using (var stream = await Task.Factory.FromAsync<Stream>(httpRequest.BeginGetRequestStream, httpRequest.EndGetRequestStream, null))
+            {
+                var settings = new Settings();
+                object deviceUuid;
+                if (!settings.TryGetValue("PushDeviceUuid", out deviceUuid))
+                {
+                    QueuePushLog("This device is not registered for push");
+                    return;
+                }
+                var deviceUuids = new string[] { deviceUuid as String };
+                var request = PushRequest.MakePushRequest("This message was pushed at " + System.DateTime.Now, deviceUuids, "raw", "ToastText01", new Dictionary<string, string>() { { "textField1", "This message is all toasty!" } });
+                var jsonString = JsonConvert.SerializeObject(request);
+                var bytes = Encoding.UTF8.GetBytes(jsonString);
+                stream.Write(bytes, 0, bytes.Length);
+            }
+
+            WebResponse webResponse;
+            try
+            {
+                webResponse = await Task.Factory.FromAsync<WebResponse>(httpRequest.BeginGetResponse, httpRequest.EndGetResponse, null);
+            }
+            catch (WebException ex)
+            {
+                webResponse = ex.Response;
+            }
+
+            var httpResponse = webResponse as HttpWebResponse;
+            if (httpResponse == null)
+            {
+                QueuePushLog("Error requesting push message: Unexpected/invalid response type. Unable to parse JSON.");
+                return;
+            }
+
+            if (IsSuccessfulHttpStatusCode(httpResponse.StatusCode))
+            {
+                QueuePushLog("Server accepted message for delivery.");
+                return;
+            }
+
+            string jsonResponse = null;
+            using (var reader = new StreamReader(httpResponse.GetResponseStream()))
+            {
+                jsonResponse = await reader.ReadToEndAsync();
+                QueuePushLog("Error requesting push message: " + jsonResponse);
+            }
+        }
+
+        private string BasicAuthorizationValue(string environmentUuid, string environmentKey)
+        {
+            var stringToEncode = String.Format("{0}:{1}", environmentUuid, environmentKey);
+            var data = Encoding.UTF8.GetBytes(stringToEncode);
+            var base64 = Convert.ToBase64String(data);
+            return String.Format("Basic {0}", base64);
+        }
+        
+        private bool IsSuccessfulHttpStatusCode(HttpStatusCode statusCode)
+        {
+            return (statusCode >= HttpStatusCode.OK && statusCode < HttpStatusCode.Ambiguous);
+        }
     }
 }

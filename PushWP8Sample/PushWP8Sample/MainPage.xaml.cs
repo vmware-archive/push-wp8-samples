@@ -92,8 +92,8 @@ namespace PushWP8Sample
             }
             catch (Exception e)
             {
-                QueuePushLog("Registration verification failed.");
-                QueuePushLog(e.ToString());
+                Log("Registration verification failed.");
+                Log(e.ToString());
             }
         }
 
@@ -106,12 +106,12 @@ namespace PushWP8Sample
             }
             catch (Exception e)
             {
-                QueuePushLog("Unregistration verification failed.");
-                QueuePushLog(e.ToString());
+                Log("Unregistration verification failed.");
+                Log(e.ToString());
             }
         }
 
-        private void QueuePushLog(string message)
+        private void Log(string message)
         {
             Dispatcher.BeginInvoke(() =>
             {
@@ -139,7 +139,7 @@ namespace PushWP8Sample
         {
             if (args.Succeeded)
             {
-                QueuePushLog("Successfully registered for Push.");
+                Log("Successfully registered for Push.");
 
                 //e.g. HttpNotificationChannel can be accessed from the args for additional use
                 _channel = args.RawNotificationChannel;
@@ -148,8 +148,8 @@ namespace PushWP8Sample
             }
             else
             {
-                QueuePushLog("Failed to register for Push.");
-                QueuePushLog(args.ErrorMessage);
+                Log("Failed to register for Push.");
+                Log(args.ErrorMessage);
             }
         }
 
@@ -157,11 +157,11 @@ namespace PushWP8Sample
         {
             if (e != null && e.Collection != null && e.Collection.ContainsKey("wp:Text1"))
             {
-                QueuePushLog("Notification received: '" + e.Collection["wp:Text1"] + "'.");
+                Log("Notification received: '" + e.Collection["wp:Text1"] + "'.");
             }
             else
             {
-                QueuePushLog("Notification received with no message.");
+                Log("Notification received with no message.");
             }
         }
 
@@ -169,12 +169,12 @@ namespace PushWP8Sample
         {
             if (args.Succeeded)
             {
-                QueuePushLog("Successfully unregistered for Push.");
+                Log("Successfully unregistered for Push.");
             }
             else
             {
-                QueuePushLog("Failed to unregister for Push.");
-                QueuePushLog(args.ErrorMessage);
+                Log("Failed to unregister for Push.");
+                Log(args.ErrorMessage);
             }
         }
 
@@ -184,13 +184,13 @@ namespace PushWP8Sample
 
         private void RegisterButton_OnClick(object sender, RoutedEventArgs e)
         {
-            QueuePushLog("Registering...");
+            Log("Registering...");
             StartPushRegistration();
         }
 
         private void UnregisterButton_OnClick(object sender, RoutedEventArgs e)
         {
-            QueuePushLog("Unregistering...");
+            Log("Unregistering...");
             StartPushUnregistration();
         }
 
@@ -208,7 +208,7 @@ namespace PushWP8Sample
                 object deviceUuid;
                 if (!settings.TryGetValue("PushDeviceUuid", out deviceUuid))
                 {
-                    QueuePushLog("This device is not registered for push.");
+                    Log("This device is not registered for push.");
                     return;
                 }
                 var deviceUuids = new string[] { deviceUuid as String };
@@ -231,13 +231,13 @@ namespace PushWP8Sample
             var httpResponse = webResponse as HttpWebResponse;
             if (httpResponse == null)
             {
-                QueuePushLog("Error requesting push message: Unexpected/invalid response type. Unable to parse JSON.");
+                Log("Error requesting push message: Unexpected/invalid response type. Unable to parse JSON.");
                 return;
             }
 
             if (IsSuccessfulHttpStatusCode(httpResponse.StatusCode))
             {
-                QueuePushLog("Server accepted message for delivery.");
+                Log("Server accepted message for delivery.");
                 return;
             }
 
@@ -245,7 +245,7 @@ namespace PushWP8Sample
             using (var reader = new StreamReader(httpResponse.GetResponseStream()))
             {
                 jsonResponse = await reader.ReadToEndAsync();
-                QueuePushLog("Error requesting push message: " + jsonResponse);
+                Log("Error requesting push message: " + jsonResponse);
             }
         }
 

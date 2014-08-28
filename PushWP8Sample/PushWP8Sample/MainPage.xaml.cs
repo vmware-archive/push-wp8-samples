@@ -115,6 +115,7 @@ namespace PushWP8Sample
         {
             Dispatcher.BeginInvoke(() =>
             {
+                Debug.WriteLine(message);
                 if (String.IsNullOrEmpty(OutputTextBox.Text))
                 {
                     OutputTextBox.Text += message;
@@ -123,7 +124,9 @@ namespace PushWP8Sample
                 {
                     OutputTextBox.Text += "\n" + message;
                 }
-                Debug.WriteLine(message);
+                // Scroll to bottom
+                OutputScrollViewer.UpdateLayout();
+                OutputScrollViewer.ScrollToVerticalOffset(OutputScrollViewer.ScrollableHeight);
             });
 
         }
@@ -176,6 +179,8 @@ namespace PushWP8Sample
         }
 
         #endregion
+
+        #region Button Handlers
 
         private void RegisterButton_OnClick(object sender, RoutedEventArgs e)
         {
@@ -256,5 +261,7 @@ namespace PushWP8Sample
         {
             return (statusCode >= HttpStatusCode.OK && statusCode < HttpStatusCode.Ambiguous);
         }
+
+        #endregion
     }
 }

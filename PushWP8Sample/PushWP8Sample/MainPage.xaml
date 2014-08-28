@@ -50,8 +50,9 @@
                     HorizontalAlignment="Center" />
         </Grid>
 
-        <ScrollViewer Padding="0,0,0,0"
-                        Grid.Row="1"
+        <ScrollViewer x:Name="OutputScrollViewer"
+                      Padding="0,0,0,0"
+                      Grid.Row="1"
                       Margin="12,0,12,10">
             <TextBox x:Name="OutputTextBox"
                         Margin="0,0,0,0"
@@ -59,8 +60,7 @@
                         Text="Successfully registered for push.&#xD;&#xA;Registering for push..."
                         IsReadOnly="true"
                         HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"/>
-                
+                        VerticalAlignment="Stretch" />
         </ScrollViewer>
     </Grid>
 

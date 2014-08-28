@@ -62,12 +62,7 @@ namespace PushWP8Sample
             }
         }
 
-        public ObservableCollection<string> Logs
-        {
-            get { return (ObservableCollection<string>)GetValue(LogsProperty); }
-            set { SetValue(LogsProperty, value); }
-        }
-
+       
         // Using a DependencyProperty as the backing store for Logs.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LogsProperty =
             DependencyProperty.Register("Logs", typeof(ObservableCollection<string>), typeof(MainPage), new PropertyMetadata(null));
@@ -78,7 +73,12 @@ namespace PushWP8Sample
         public MainPage()
         {
             InitializeComponent();
-            Logs = new ObservableCollection<string>();
+            Loaded += OnLoaded;
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            OutputTextBox.Text = "";
         }
 
         #region WP8 Push Client SDK Methods
@@ -115,7 +115,14 @@ namespace PushWP8Sample
         {
             Dispatcher.BeginInvoke(() =>
             {
-                Logs.Add(message);
+                if (String.IsNullOrEmpty(OutputTextBox.Text))
+                {
+                    OutputTextBox.Text += message;
+                }
+                else
+                {
+                    OutputTextBox.Text += "\n" + message;
+                }
                 Debug.WriteLine(message);
             });
 
@@ -129,7 +136,7 @@ namespace PushWP8Sample
         {
             if (args.Succeeded)
             {
-                QueuePushLog("Successfully registered for Push");
+                QueuePushLog("Successfully registered for Push.");
 
                 //e.g. HttpNotificationChannel can be accessed from the args for additional use
                 _channel = args.RawNotificationChannel;
@@ -138,7 +145,7 @@ namespace PushWP8Sample
             }
             else
             {
-                QueuePushLog("Failed to register for Push");
+                QueuePushLog("Failed to register for Push.");
                 QueuePushLog(args.ErrorMessage);
             }
         }
@@ -159,11 +166,11 @@ namespace PushWP8Sample
         {
             if (args.Succeeded)
             {
-                QueuePushLog("Successfully unregistered for Push");
+                QueuePushLog("Successfully unregistered for Push.");
             }
             else
             {
-                QueuePushLog("Failed to unregister for Push");
+                QueuePushLog("Failed to unregister for Push.");
                 QueuePushLog(args.ErrorMessage);
             }
         }
@@ -196,7 +203,7 @@ namespace PushWP8Sample
                 object deviceUuid;
                 if (!settings.TryGetValue("PushDeviceUuid", out deviceUuid))
                 {
-                    QueuePushLog("This device is not registered for push");
+                    QueuePushLog("This device is not registered for push.");
                     return;
                 }
                 var deviceUuids = new string[] { deviceUuid as String };

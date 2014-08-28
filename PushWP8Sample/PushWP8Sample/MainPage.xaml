@@ -50,24 +50,18 @@
                     HorizontalAlignment="Center" />
         </Grid>
 
-        <!--ContentPanel - place additional content here-->
-        <Border x:Name="ContentPanel"
-                Grid.Row="1"
-                Margin="12,0,12,12"
-                BorderBrush="White"
-                BorderThickness="2">
-            <phone:LongListSelector x:Name="LogView" ItemsSource="{Binding Logs, ElementName=PageRoot}">
-                <phone:LongListSelector.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding }"
-                                   Margin="5,0"
-                                   HorizontalAlignment="Stretch"
-                                   TextWrapping="Wrap"
-                                   TextAlignment="Left"/>
-                    </DataTemplate>
-                </phone:LongListSelector.ItemTemplate>
-            </phone:LongListSelector>
-        </Border>
+        <ScrollViewer Padding="0,0,0,0"
+                        Grid.Row="1"
+                      Margin="12,0,12,10">
+            <TextBox x:Name="OutputTextBox"
+                        Margin="0,0,0,0"
+                        TextWrapping="Wrap"
+                        Text="Successfully registered for push.&#xD;&#xA;Registering for push..."
+                        IsReadOnly="true"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"/>
+                
+        </ScrollViewer>
     </Grid>
 
 </phone:PhoneApplicationPage>

@@ -250,5 +250,27 @@ namespace PushWP8Sample
         }
 
         #endregion
+
+        private void OnPageRoot_OrientationChanged(object sender, OrientationChangedEventArgs e)
+        {
+            if (e.Orientation == PageOrientation.LandscapeLeft || e.Orientation == PageOrientation.LandscapeRight)
+            {
+                Grid.SetRow(buttonList, 0);
+                Grid.SetColumn(buttonList, 0);
+                Grid.SetRow(OutputScrollViewer, 0);
+                Grid.SetColumn(OutputScrollViewer, 1);
+            }
+            else if(e.Orientation ==  PageOrientation.PortraitUp)
+            {
+                Grid.SetRow(buttonList, 0);
+                Grid.SetColumn(buttonList, 0);
+                Grid.SetRow(OutputScrollViewer, 1);
+                Grid.SetColumn(OutputScrollViewer, 0);
+            }
+            else
+            {
+                Debug.WriteLine("confused about orientation");
+            }
+        }
     }
 }

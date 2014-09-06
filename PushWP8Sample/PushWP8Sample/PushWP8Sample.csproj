@@ -150,12 +150,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="MSSPush-Base, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="MSSPush-Base">
       <HintPath>..\lib\MSSPush-Base.dll</HintPath>
     </Reference>
-    <Reference Include="MSSPush-WP8, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="MSSPush-WP8">
       <HintPath>..\lib\MSSPush-WP8.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">

@@ -1,4 +1,5 @@
-﻿<phone:PhoneApplicationPage
+﻿
+<phone:PhoneApplicationPage
     x:Name="PageRoot"
     x:Class="PushWP8Sample.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"

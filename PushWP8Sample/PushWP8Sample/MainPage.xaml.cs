@@ -200,7 +200,7 @@ namespace PushWP8Sample
                 }
                 var deviceUuids = new string[] { deviceUuid as String };
                 var request = PushRequest.MakePushRequest("This message was pushed at " + System.DateTime.Now, deviceUuids, "raw", "ToastText01", new Dictionary<string, string>() { { "textField1", "This message is all toasty!" } });
-                var jsonSerializer = new JsonSerializer(typeof(PushRequest));
+                var jsonSerializer = new JsonSerializer();
                 var jsonString = jsonSerializer.SerializeToJson(request);
                 var bytes = Encoding.UTF8.GetBytes(jsonString);
                 stream.Write(bytes, 0, bytes.Length);

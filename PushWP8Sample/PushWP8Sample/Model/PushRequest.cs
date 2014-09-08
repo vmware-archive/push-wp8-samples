@@ -4,18 +4,16 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace push_wp8_sample.Model
 {
-    [JsonObject(MemberSerialization.OptIn)]
     [DataContract]
     class PushRequest
     {
-        [DataMember, JsonProperty(PropertyName = "message", NullValueHandling = NullValueHandling.Ignore)]
+        [DataMember(Name = "message", EmitDefaultValue = false)]
         public PushRequestMessage Message { get; set; }
 
-        [DataMember, JsonProperty(PropertyName = "target", NullValueHandling = NullValueHandling.Ignore)]
+        [DataMember(Name = "target", EmitDefaultValue = false)]
         public PushRequestTarget Target { get; set; }
 
         private PushRequest()
@@ -49,45 +47,42 @@ namespace push_wp8_sample.Model
         }
     }
 
-    [JsonObject(MemberSerialization.OptIn)]
     [DataContract]
     internal class PushRequestMessage
     {
-        [DataMember, JsonProperty(PropertyName = "body", NullValueHandling = NullValueHandling.Ignore)]
+        [DataMember(Name = "body", EmitDefaultValue = false)]
         public string Body { get; set; }
 
-        [DataMember, JsonProperty(PropertyName = "custom", NullValueHandling = NullValueHandling.Ignore)]        
+        [DataMember(Name = "custom", EmitDefaultValue = false)]        
         public PushRequestMessageCustom Custom { get; set; }
     }
 
-    [JsonObject(MemberSerialization.OptIn)]
     [DataContract]
     internal class PushRequestMessageCustom
     {
-        [DataMember, JsonProperty(PropertyName = "windows8", NullValueHandling = NullValueHandling.Ignore)]
+        [DataMember(Name = "windows8", EmitDefaultValue = false)]
         public PushRequestMessageCustomWindows8 Windows8 { get; set; }
     }
 
     internal class PushRequestMessageCustomWindows8
     {
-        [DataMember, JsonProperty(PropertyName = "type", NullValueHandling = NullValueHandling.Ignore)]
+        [DataMember(Name = "type", EmitDefaultValue = false)]
         public string Type { get; set; }
 
-        [DataMember, JsonProperty(PropertyName = "template_name", NullValueHandling = NullValueHandling.Ignore)]
+        [DataMember(Name = "template_name", EmitDefaultValue = false)]
         public string TemplateName { get; set; }
 
-        [DataMember, JsonProperty(PropertyName = "template_fields", NullValueHandling = NullValueHandling.Ignore)]
+        [DataMember(Name = "template_fields", EmitDefaultValue = false)]
         public Dictionary<String, String> TemplateFields { get; set; } 
     }
 
-    [JsonObject(MemberSerialization.OptIn)]
     [DataContract]
     internal class PushRequestTarget
     {
-        [DataMember, JsonProperty(PropertyName = "platform", NullValueHandling = NullValueHandling.Ignore)]
+        [DataMember(Name = "platform", EmitDefaultValue = false)]
         public string Platform { get; set; }
-     
-        [DataMember, JsonProperty(PropertyName = "devices", NullValueHandling = NullValueHandling.Ignore)]
+
+        [DataMember(Name = "devices", EmitDefaultValue = false)]
         public string[] Devices { get; set; }
     }
 }

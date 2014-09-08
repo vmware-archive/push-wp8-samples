@@ -17,9 +17,9 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Notification;
 using Microsoft.Phone.Shell;
 using MSSPush_Base.Models;
+using MSSPush_Base.Utilities;
 using MSSPush_WP8;
 using MSSPush_WP8.Models;
-using Newtonsoft.Json;
 using PushWP8Sample.Resources;
 using push_wp8_sample.Model;
 
@@ -200,7 +200,8 @@ namespace PushWP8Sample
                 }
                 var deviceUuids = new string[] { deviceUuid as String };
                 var request = PushRequest.MakePushRequest("This message was pushed at " + System.DateTime.Now, deviceUuids, "raw", "ToastText01", new Dictionary<string, string>() { { "textField1", "This message is all toasty!" } });
-                var jsonString = JsonConvert.SerializeObject(request);
+                var jsonSerializer = new JsonSerializer<PushRequest>();
+                var jsonString = jsonSerializer.SerializeToJson(request);
                 var bytes = Encoding.UTF8.GetBytes(jsonString);
                 stream.Write(bytes, 0, bytes.Length);
             }

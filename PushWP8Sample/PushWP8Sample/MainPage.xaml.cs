@@ -3,24 +3,17 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Navigation;
-using Windows.Foundation.Metadata;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Notification;
-using Microsoft.Phone.Shell;
 using MSSPush_Base.Models;
 using MSSPush_Base.Utilities;
 using MSSPush_WP8;
 using MSSPush_WP8.Models;
-using PushWP8Sample.Resources;
 using push_wp8_sample.Model;
 
 namespace PushWP8Sample
